@@ -1,0 +1,5 @@
+# venv
+env
+
+# compiled files
+__pycache__
