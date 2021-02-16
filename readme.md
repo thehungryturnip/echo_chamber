@@ -106,7 +106,7 @@ reflects the string passed in  back to the caller in a respons of this format:
         str: <string reflected back to the caller>
     }
 
-## SLOs
+## Service Level Objectives
 I think of SLOs as what the consumer and risk management should be
 experincing/expecting and then extrapolate to finer sub-SLOs we can measure and
 improve on. e.g.
