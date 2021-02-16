@@ -2,7 +2,7 @@ import json
 import random
 import string
 import unittest
-from app import app, errors, AUTH_TOKENS
+from app import app, HTTP_ERRORS, AUTH_TOKENS
 
 class ServerLiveTest(unittest.TestCase):
     def setUp(self):
@@ -44,7 +44,7 @@ class EchoApiTest(unittest.TestCase):
                                  data=json.dumps(payload),
                                  content_type='application/json')
         response = response.get_json()
-        self.assertEqual(response, errors['NoStringProvidedError'])
+        self.assertEqual(response, HTTP_ERRORS['NoStringProvidedError'])
 
     def test_echo_incorrect_key(self):
         print('## Testing when incorrect string key is provided...')
@@ -57,7 +57,7 @@ class EchoApiTest(unittest.TestCase):
                                      content_type='application/json')
             response = response.get_json()
             self.assertEqual(response,
-                             errors['NoStringProvidedError'])
+                             HTTP_ERRORS['NoStringProvidedError'])
 
     def test_echo_mixed_keys(self):
         print('## Testing when irrelevant keys are provided...')
@@ -85,7 +85,7 @@ class EchoApiTest(unittest.TestCase):
                                  data=json.dumps(payload),
                                  content_type='application/json')
         response = response.get_json()
-        self.assertEqual(response, errors['NotAuthorizedError'])
+        self.assertEqual(response, HTTP_ERRORS['NotAuthorizedError'])
 
     def test_echo_invalid_auth_token(self):
         print('## Testing when invallid auth tokens are provided...')
@@ -95,7 +95,7 @@ class EchoApiTest(unittest.TestCase):
                                  data=json.dumps(payload),
                                  content_type='application/json')
         response = response.get_json()
-        self.assertEqual(response, errors['NotAuthorizedError'])
+        self.assertEqual(response, HTTP_ERRORS['NotAuthorizedError'])
 
 if __name__ == '__main__':
     unittest.main()
