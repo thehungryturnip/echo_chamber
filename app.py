@@ -15,14 +15,13 @@ class EchoAPI(Resource):
     STR_KEY = 'str'
 
     def post(self):
+        data = request.get_json()
         try:
-            data = request.get_json()
-            s = data[STR_KEY]
+            s = data[self.STR_KEY]
         except (TypeError, KeyError):
             raise NoStringProvidedError
-        except Exception as e:
-            raise InternalServerError
-        return Response(response=json.dumps({STR_KEY: s}),
+
+        return Response(response=json.dumps({self.STR_KEY: s}),
                         status=200,
                         mimetype='application/json')
 
@@ -37,7 +36,8 @@ errors = {
         'message': 'Something went wrong',
         'status': 500},
     'NoStringProvidedError': {
-        'message': 'Request must contain string to be echoed in variable \'str\'',
+        'message': ('Request must contain string to be echoed in variable ' 
+                    '\'str\''),
         'status': 400},
     }
 
@@ -47,4 +47,8 @@ api.add_resource(HelloAPI, '/', '/hello')
 api.add_resource(EchoAPI, '/echo')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='127.0.0.1',
+            port='5000',
+            ssl_context=('cert.pem', 'key.pem'),
+            debug=True,
+            )
