@@ -10,6 +10,8 @@ AUTH_TOKENS = ['W8cwfEUN2BsBNt5G4rMGQu9A',
                'rzFsMgKEYsNRvdZnhBHSw8JC']
 
 class HelloAPI(Resource):
+    # The purpose of this API is to be provide a simple response (as a test to
+    # make sure the server is up.
     def get(self):
         data = {'Hello': 'Welcome to the Echo Room.'}
         return Response(response=json.dumps(data),
@@ -17,6 +19,9 @@ class HelloAPI(Resource):
                         mimetype='application/json')
 
 class EchoAPI(Resource):
+    # This is the main ECHO API, providing 1 simple POST method that accepts a
+    # JSON payload with 2 key-value pairs: 'auth', with an auth token to be
+    # validated; and 'str', the string to be reflected back to the caller.
 
     AUTH_KEY = 'auth'
     STR_KEY = 'str'
