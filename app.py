@@ -3,6 +3,12 @@ from flask import Flask, Response, request
 from flask_restful import Api, Resource
 from werkzeug.exceptions import HTTPException
 
+AUTH_TOKENS = ['W8cwfEUN2BsBNt5G4rMGQu9A',
+               'n9hnzJY3MKjU5JXSSrH5hXfR',
+               'suqku8Qm4FqUynH98cL98ZJG',
+               'M7SnndsM7tVs7hfBhhJbADgv',
+               'rzFsMgKEYsNRvdZnhBHSw8JC']
+
 class HelloAPI(Resource):
     def get(self):
         data = {'Hello': 'Welcome to the Echo Room.'}
@@ -12,10 +18,19 @@ class HelloAPI(Resource):
 
 class EchoAPI(Resource):
 
+    AUTH_KEY = 'auth'
     STR_KEY = 'str'
 
     def post(self):
         data = request.get_json()
+        try:
+            a = data[self.AUTH_KEY]
+        except (TypeError, KeyError):
+            raise NotAuthorizedError
+
+        if not a in AUTH_TOKENS:
+            raise NotAuthorizedError
+
         try:
             s = data[self.STR_KEY]
         except (TypeError, KeyError):
@@ -31,6 +46,9 @@ class InternalServerError(HTTPException):
 class NoStringProvidedError(HTTPException):
     pass
 
+class NotAuthorizedError(HTTPException):
+    pass
+
 errors = {
     'InternalServerError': {
         'message': 'Something went wrong',
@@ -39,6 +57,10 @@ errors = {
         'message': ('Request must contain string to be echoed in variable ' 
                     '\'str\''),
         'status': 400},
+    'NotAuthorizedError': {
+        'message': ('Request must contain valid authorization token in '
+                    'valiable \'auth\''),
+        'status': 401},
     }
 
 app = Flask(__name__)
